@@ -4,14 +4,13 @@ import sys
 import main_news
 import find
 import requests
-import os
+import os                                
 from config import TOKEN_API, start_message
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
-from aiogram.filters import Command
-from aiogram.types import Message, InputFile, FSInputFile
+from aiogram.types import FSInputFile
 from aiogram.filters import CommandStart
-from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardMarkup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 TOKEN = TOKEN_API
 dp = Dispatcher()
@@ -112,7 +111,9 @@ async def news_posting(user_id, button_text, url, folder, move):
         result = await find.find_news(url)
         print(news_message_id)
         if result == ([], [], []):
-            await bot1.send_message(chat_id=user_id, text="Результатів не знайдено.")
+            sent_message = await bot1.send_message(chat_id=user_id, text="Результатів не знайдено.")
+            await asyncio.sleep(2)
+            await bot1.delete_message(chat_id=user_id, message_id=sent_message.message_id)
         else:
             title, link, photo = result
 
